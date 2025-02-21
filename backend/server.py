@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from model.sentiment_model import analyze_sentiment
+from model.sentiment_model import analyze_sentiment  # Ensure this matches your model path
 import os  # Import os to get environment variables
 
 app = Flask(__name__)
