@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('./images/background.jpg') no-repeat center center/cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+        textarea {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #333;
+    color: white;
+    outline: none;
+    resize: none;
+    box-sizing: border-box; 
+}
+
+        .container {
+            width: 90%;
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            outline: none;
+            resize: none;
+            backdrop-filter: blur(6px);
+            font-weight: 500;
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #007BFF, #00408b);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #0056b3, #002f6b);
+            transform: scale(1.05);
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+            color: #FFD700;
+            text-shadow: 1px 1px 5px rgba(255, 215, 0, 0.8);
+        }
+
+        .chart-container {
+            margin-top: 20px;
+            width: 100%;
+            max-height: 280px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sentiment Analysis Dashboard</h1>
+        <textarea id="textInput" placeholder="Enter your product review..."></textarea>
+        <button onclick="analyzeSentiment()">Analyze Sentiment</button>
+        <h2 id="result"></h2>
+        <div class="chart-container">
+            <canvas id="sentimentChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let sentimentChart;
+
+        function analyzeSentiment() {
+            const text = document.getElementById("textInput").value.trim();
+            if (!text) {
+                document.getElementById("result").innerText = "Please enter a review!";
+                document.getElementById("result").style.display = "block";
+                return;
+            }
+
+            axios.post("http://127.0.0.1:5000/predict", { text })
+                .then(response => {
+                    const { sentiment, confidence } = response.data;
+                    const resultElem = document.getElementById("result");
+                    
+                    resultElem.innerText = `Sentiment: ${sentiment} (Confidence: ${(confidence * 100).toFixed(2)}%)`;
+                    resultElem.style.display = "block";
+                    updateChart(sentiment, confidence * 100);
+                })
+                .catch(error => {
+                    document.getElementById("result").innerText = "Error analyzing sentiment.";
+                    console.error(error);
+                });
+        }
+
+        function updateChart(sentiment, confidence) {
+            const sentiments = ["Very Negative", "Negative", "Neutral", "Positive", "Very Positive"];
+            const colors = ["#FF4C4C", "#FF8C00", "#FFD700", "#32CD32", "#008000"];
+
+            const remainingPercentage = 100 - confidence;
+            const distributedPercentage = remainingPercentage / (sentiments.length - 1);
+            const data = sentiments.map(s => s === sentiment ? confidence : distributedPercentage);
+
+            if (sentimentChart) {
+                sentimentChart.destroy();
+            }
+
+            const ctx = document.getElementById("sentimentChart").getContext("2d");
+            sentimentChart = new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: sentiments,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: "white",
+                                font: { size: 14 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
