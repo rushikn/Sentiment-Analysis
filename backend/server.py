@@ -1,22 +1,24 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from model.sentiment_model import analyze_sentiment  # Ensure this matches your model path
-import os  # Import os to get environment variables
+from model.sentiment_model import analyze_sentiment
+import os
 
 app = Flask(__name__)
 CORS(app, resources={r"/predict": {"origins": "*"}})
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.get_json()
-    text = data.get("text", "")
+    try:
+        data = request.get_json()
+        if not data or "text" not in data:
+            return jsonify({"error": "No text provided"}), 400
 
-    if not text:
-        return jsonify({"error": "No text provided"}), 400
+        sentiment, confidence = analyze_sentiment(data["text"])
+        return jsonify({"sentiment": sentiment, "confidence": confidence})
 
-    sentiment, confidence = analyze_sentiment(text)
-    return jsonify({"sentiment": sentiment, "confidence": confidence})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Get port from environment
-    app.run(debug=False, host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 5000))  
+    app.run(debug=True, host="0.0.0.0", port=port)

@@ -1,0 +1,56 @@
+Very Positive:
+Absolutely loved this product! The quality exceeded my expectations.
+
+Positive :
+Nice experience overall, just a few minor issues
+
+Neutral: 
+It was okay, nothing special.
+
+Negative: 
+service was slow, and the product quality was just average.
+
+Very Negative
+Absolutely disappointed. Total waste of money!
+
+Very Positive:
+English: Absolutely loved this product! The quality exceeded my expectations.
+French: J'ai adoré ce produit ! La qualité a dépassé mes attentes.
+Italian: Ho adorato questo prodotto! La qualità ha superato le mie aspettative.
+German: Ich habe dieses Produkt absolut geliebt! Die Qualität hat meine Erwartungen übertroffen.
+Spanish: ¡Me encantó este producto! La calidad superó mis expectativas.
+Dutch: Ik vond dit product geweldig! De kwaliteit overtrof mijn verwachtingen.
+
+ Positive:
+English: Nice experience overall, just a few minor issues.
+French: Expérience agréable dans l’ensemble, quelques petits problèmes.
+Italian: Esperienza piacevole nel complesso, solo alcuni piccoli problemi.
+German: Insgesamt eine gute Erfahrung, nur ein paar kleinere Probleme.
+Spanish: Buena experiencia en general, solo algunos problemas menores.
+Dutch: Over het algemeen een fijne ervaring, slechts een paar kleine problemen.
+
+Neutral:
+English: It was okay, nothing special.
+French: C'était correct, rien de spécial.
+Italian: Era okay, niente di speciale.
+German: Es war okay, nichts Besonderes.
+Spanish: Estuvo bien, nada especial.
+Dutch: Het was prima, niets bijzonders.
+
+ Negative:
+English: Service was slow, and the product quality was just average.
+French: Le service était lent et la qualité du produit était moyenne.
+Italian: Il servizio era lento e la qualità del prodotto era nella media.
+German: Der Service war langsam und die Produktqualität war nur durchschnittlich.
+Spanish: El servicio fue lento y la calidad del producto fue solo promedio.
+Dutch: De service was traag en de productkwaliteit was gemiddeld.
+
+🚨 Very Negative:
+English: Absolutely disappointed. Total waste of money!
+French: Totalement déçu. Une perte d'argent totale !
+Italian: Assolutamente deluso. Uno spreco totale di soldi!
+German: Absolut enttäuscht. Völlige Geldverschwendung!
+Spanish: Totalmente decepcionado. ¡Una completa pérdida de dinero!
+Dutch: Volledig teleurgesteld. Volledige geldverspilling!
+
+
